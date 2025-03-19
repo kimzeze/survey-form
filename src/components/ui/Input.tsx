@@ -127,7 +127,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               >
                 {label}
                 {required && (
-                  <span className="ml-5xs text-red-500" aria-hidden="true">
+                  <span className="ml-5xs text-error" aria-hidden="true">
                     *
                   </span>
                 )}
@@ -150,7 +150,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                   ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400"
                   : "bg-white",
                 "focus:outline-none",
-                error ? "focus:border-red-500" : "focus:border-gray-800",
+                error ? "focus:border-error" : "focus:border-gray-800",
                 "[&:-webkit-autofill]:!border-gray-100 [&:-webkit-autofill]:text-md [&:-webkit-autofill]:shadow-[0_0_0_1000px_white_inset] [&:-webkit-autofill_focus]:!border-gray-800",
                 className,
               )}
