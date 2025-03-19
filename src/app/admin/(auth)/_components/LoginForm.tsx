@@ -1,8 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
+import { useRouter } from "next/navigation";
+
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import PasswordInput from "@/components/ui/PasswordInput";
+import { login } from "@/services/auth/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,6 +25,9 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
   // react-hook-form 설정
   const {
     register,
@@ -27,6 +35,7 @@ const LoginForm = () => {
     formState: { errors, isSubmitting },
     resetField,
     clearErrors,
+    setError: setFormError,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -40,17 +49,42 @@ const LoginForm = () => {
   // 필드 초기화 핸들러
   const handleResetField = (fieldName: keyof LoginFormValues) => {
     resetField(fieldName);
-    clearErrors(fieldName); // 에러 상태도 함께 초기화
+    clearErrors(fieldName);
   };
 
   const onSubmit = async (data: LoginFormValues) => {
-    // 서버 요청을 시뮬레이션하기 위한 지연
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      setError(null);
+      clearErrors();
 
-    console.log(data);
+      const result = await login({
+        email: data.email,
+        password: data.password,
+      });
 
-    // 로그인 처리 로직 구현
-    // TODO: API 호출 및 인증 로직 구현
+      if (!result.success) {
+        if (
+          result.error?.includes("Invalid login credentials") ||
+          result.error?.includes("invalid_credentials")
+        ) {
+          setFormError("email", {
+            type: "manual",
+            message: "아이디 또는 비밀번호를 확인해주세요.",
+          });
+          return;
+        }
+
+        // 기타 오류는 기존 방식으로 표시
+        setError(result.error || "알 수 없는 오류가 발생했습니다.");
+        return;
+      }
+
+      router.push("/admin");
+      router.refresh();
+    } catch (err) {
+      console.error("로그인 오류:", err);
+      setError("로그인 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -76,13 +110,15 @@ const LoginForm = () => {
         onClear={() => handleResetField("password")}
       />
 
+      {error && <div className="mt-2 text-sm text-error">{error}</div>}
+
       <Button
         type="submit"
         fullWidth
         disabled={isSubmitting}
         color="black"
         height="48px"
-        className="text-md font-semibold"
+        className="mt-4 text-md font-semibold"
       >
         {isSubmitting ? "로그인 중..." : "로그인"}
       </Button>
