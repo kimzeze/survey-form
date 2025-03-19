@@ -192,21 +192,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </div>
         </div>
 
-        {/* 에러 메시지 - 항상 인풋 아래에 표시 */}
-        {error && (
-          <p
-            id={errorId}
-            role="alert"
-            aria-live="assertive"
-            className={cn(
-              "mt-1.5 pl-4xs text-sm text-error transition-opacity duration-300 ease-in",
-              direction === "row" && "ml-[110px]",
-            )}
-            style={{ animation: "fadeInDown 0.3s ease-out" }}
-          >
-            {error}
-          </p>
-        )}
+        {/* 에러 메시지 영역 - 항상 동일한 높이를 유지하기 위한 컨테이너 */}
+        <div className={cn("h-[28px] overflow-hidden", direction === "row" && "ml-[110px]")}>
+          {/* 에러 메시지 - 실제 메시지가 있을 때만 표시 */}
+          {error && (
+            <p
+              id={errorId}
+              role="alert"
+              aria-live="assertive"
+              className="mt-1.5 pl-4xs text-sm text-error transition-opacity duration-300 ease-in"
+              style={{ animation: "fadeInDown 0.3s ease-out" }}
+            >
+              {error}
+            </p>
+          )}
+        </div>
       </div>
     );
   },
