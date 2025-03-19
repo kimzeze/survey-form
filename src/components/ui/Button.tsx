@@ -37,8 +37,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ children, className, color = "white", fullWidth = false, width, height, ...props }, ref) => {
     const colorVariants = {
-      white: "bg-white border-gray-100 disabled:hover:bg-white hover:bg-gray-50",
-      black: "bg-gray-900 border-gray-900 text-white disabled:hover:bg-gray-900 hover:bg-gray-800",
+      white: "bg-white border-gray-100 disabled:hover:bg-white hover:bg-gray-50 active:bg-gray-100",
+      black:
+        "bg-gray-900 border-gray-900 text-white disabled:hover:bg-gray-900 hover:bg-gray-800 active:bg-gray-900",
     };
 
     return (
