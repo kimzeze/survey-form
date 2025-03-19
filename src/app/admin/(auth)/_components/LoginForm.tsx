@@ -54,12 +54,12 @@ const LoginForm = () => {
   };
 
   return (
-    <form className="space-y-4" noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form noValidate onSubmit={handleSubmit(onSubmit)}>
       <Input
         id="email"
         type="email"
-        label="이메일"
-        placeholder="이메일을 입력하세요"
+        label="관리자 계정"
+        placeholder="ADMIN ID"
         {...register("email")}
         error={errors.email?.message}
         required
@@ -69,14 +69,21 @@ const LoginForm = () => {
       <PasswordInput
         id="password"
         label="비밀번호"
-        placeholder="비밀번호를 입력하세요"
+        placeholder="ADMIN PASSWORD"
         {...register("password")}
         error={errors.password?.message}
         required
         onClear={() => handleResetField("password")}
       />
 
-      <Button type="submit" fullWidth disabled={isSubmitting}>
+      <Button
+        type="submit"
+        fullWidth
+        disabled={isSubmitting}
+        color="black"
+        height="48px"
+        className="text-md font-semibold"
+      >
         {isSubmitting ? "로그인 중..." : "로그인"}
       </Button>
     </form>
